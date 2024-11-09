@@ -1,14 +1,13 @@
-package com.example.application;
+package com.example.application.data;
 
-import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
+import java.time.LocalDate;
 
 public class User {
   private String firstName;
-  private LocalDateTime dateOfBirth;
+  private LocalDate dateOfBirth;
   private String email;
 
-  public User(String firstName, LocalDateTime dateOfBirth, String email) {
+  public User(String firstName, LocalDate dateOfBirth, String email) {
     this.firstName = firstName;
     this.dateOfBirth = dateOfBirth;
     this.email = email;
@@ -22,11 +21,11 @@ public class User {
     this.firstName = firstName;
   }
 
-  public LocalDateTime getDateOfBirth() {
+  public LocalDate getDateOfBirth() {
     return dateOfBirth;
   }
 
-  public void setDateOfBirth(LocalDateTime dateOfBirth) {
+  public void setDateOfBirth(LocalDate dateOfBirth) {
     this.dateOfBirth = dateOfBirth;
   }
 

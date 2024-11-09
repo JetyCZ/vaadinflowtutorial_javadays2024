@@ -1,25 +1,14 @@
 package com.example.application.views.usermanagement;
 
-import com.example.application.User;
-import com.vaadin.flow.component.ClickEvent;
-import com.vaadin.flow.component.ComponentEventListener;
-import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.button.ButtonVariant;
-import com.vaadin.flow.component.datepicker.DatePicker;
-import com.vaadin.flow.component.formlayout.FormLayout;
+import com.example.application.data.User;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H3;
-import com.vaadin.flow.component.notification.Notification;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.textfield.EmailField;
-import com.vaadin.flow.component.textfield.TextField;
-import com.vaadin.flow.data.renderer.LocalDateTimeRenderer;
+import com.vaadin.flow.data.renderer.LocalDateRenderer;
 import com.vaadin.flow.router.Menu;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.theme.lumo.LumoUtility.Gap;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,17 +19,9 @@ import java.util.List;
 public class UserView extends VerticalLayout {
 
     List<User> userDb = new ArrayList<>();
-
-    H3 h3 = new H3();
-    FormLayout form = new FormLayout();
-    TextField firstName = new TextField();
-    DatePicker dateOfBirth = new DatePicker();
-    EmailField email = new EmailField();
-    HorizontalLayout buttonsRow = new HorizontalLayout();
-    Button saveNewUser = new Button();
-    Button cancelBtn = new Button();
-
     Grid<User> userGrid = new Grid<>(User.class);
+    H3 h3 = new H3();
+    UserForm userForm = new UserForm();
 
     public UserView() {
         setWidth("100%");
@@ -50,12 +31,10 @@ public class UserView extends VerticalLayout {
         initUserGrid();
         add(userGrid);
 
-        initUserForm();
-        add(form);
-
-        initButtonsRow();
-        add(buttonsRow);
-
+        h3.setText("Add new user");
+        h3.setWidth("100%");
+        add(h3);
+        add(userForm);
     }
 
     private void initUserGrid() {
@@ -63,47 +42,17 @@ public class UserView extends VerticalLayout {
         userGrid.addColumn("firstName").setHeader("First name");
         userGrid.addColumn("email").setHeader("E-mail");
 
-        userGrid.addColumn(new LocalDateTimeRenderer<>(
+        userGrid.addColumn(new LocalDateRenderer<>(
                 User::getDateOfBirth,
                 () -> DateTimeFormatter.ofPattern("d.M. yyyy")))
             .setHeader("Date of birth");
 
-        userDb.add(new User("Pavel", LocalDateTime.now(), "pavel@seznam.cz"));
-        userDb.add(new User("Jan", LocalDateTime.now(), "jan@seznam.cz"));
+        userDb.add(new User("Pavel", LocalDate.now(), "pavel@seznam.cz"));
+        userDb.add(new User("Jan", LocalDate.now(), "jan@seznam.cz"));
 
         userGrid.setItems(userDb);
     }
 
-    private void initButtonsRow() {
-        buttonsRow.addClassName(Gap.MEDIUM);
-        buttonsRow.setWidth("100%");
-        saveNewUser.setText("Save new user");
-        saveNewUser.setWidth("min-content");
-        saveNewUser.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-        saveNewUser.addClickListener(new ComponentEventListener<ClickEvent<Button>>() {
-            @Override
-            public void onComponentEvent(ClickEvent<Button> buttonClickEvent) {
-                Notification.show("User " + firstName.getValue() + " has been registered");
-            }
-        });
-        cancelBtn.setText("Cancel");
-        cancelBtn.setWidth("min-content");
-        buttonsRow.add(saveNewUser);
-        buttonsRow.add(cancelBtn);
-    }
-
-    private void initUserForm() {
-        h3.setText("Add new user");
-        h3.setWidth("100%");
-        add(h3);
-        form.setWidth("100%");
-        firstName.setLabel("First Name");
-        dateOfBirth.setLabel("Birthday");
-        email.setLabel("Email");
-        form.add(firstName);
-        form.add(dateOfBirth);
-        form.add(email);
-    }
 
 
 }
