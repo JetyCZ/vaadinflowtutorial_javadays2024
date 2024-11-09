@@ -18,11 +18,13 @@ import com.vaadin.flow.router.Menu;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.theme.lumo.LumoUtility.Gap;
+import java.time.LocalDateTime;
 
 @PageTitle("User management")
 @Route("")
 @Menu(order = 1, icon = "line-awesome/svg/user.svg")
 public class UserView extends VerticalLayout {
+
 
     H3 h3 = new H3();
     FormLayout form = new FormLayout();
@@ -30,7 +32,7 @@ public class UserView extends VerticalLayout {
     DatePicker dateOfBirth = new DatePicker();
     EmailField email = new EmailField();
     HorizontalLayout buttonsRow = new HorizontalLayout();
-    Button registerNewAccountBtn = new Button();
+    Button saveNewUser = new Button();
     Button cancelBtn = new Button();
 
     Grid<User> userGrid = new Grid<>(User.class);
@@ -56,15 +58,16 @@ public class UserView extends VerticalLayout {
         userGrid.addColumn("firstName").setHeader("First name");
         userGrid.addColumn("email").setHeader("E-mail");
         userGrid.addColumn("dateOfBirth").setHeader("Birthday");
+
     }
 
     private void initButtonsRow() {
         buttonsRow.addClassName(Gap.MEDIUM);
         buttonsRow.setWidth("100%");
-        registerNewAccountBtn.setText("Register new account");
-        registerNewAccountBtn.setWidth("min-content");
-        registerNewAccountBtn.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-        registerNewAccountBtn.addClickListener(new ComponentEventListener<ClickEvent<Button>>() {
+        saveNewUser.setText("Save new user");
+        saveNewUser.setWidth("min-content");
+        saveNewUser.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        saveNewUser.addClickListener(new ComponentEventListener<ClickEvent<Button>>() {
             @Override
             public void onComponentEvent(ClickEvent<Button> buttonClickEvent) {
                 Notification.show("User " + firstName.getValue() + " has been registered");
@@ -72,7 +75,7 @@ public class UserView extends VerticalLayout {
         });
         cancelBtn.setText("Cancel");
         cancelBtn.setWidth("min-content");
-        buttonsRow.add(registerNewAccountBtn);
+        buttonsRow.add(saveNewUser);
         buttonsRow.add(cancelBtn);
     }
 
