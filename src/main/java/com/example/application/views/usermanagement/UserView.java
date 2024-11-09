@@ -1,6 +1,6 @@
 package com.example.application.views.usermanagement;
 
-import com.example.application.User;
+import com.example.application.data.User;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.button.Button;
@@ -14,17 +14,22 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.EmailField;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.data.renderer.LocalDateRenderer;
 import com.vaadin.flow.router.Menu;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.theme.lumo.LumoUtility.Gap;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 @PageTitle("User management")
 @Route("")
 @Menu(order = 1, icon = "line-awesome/svg/user.svg")
 public class UserView extends VerticalLayout {
 
+    List<User> userDb = new ArrayList<>();
 
     H3 h3 = new H3();
     FormLayout form = new FormLayout();
@@ -57,8 +62,16 @@ public class UserView extends VerticalLayout {
         userGrid.removeAllColumns();
         userGrid.addColumn("firstName").setHeader("First name");
         userGrid.addColumn("email").setHeader("E-mail");
-        userGrid.addColumn("dateOfBirth").setHeader("Birthday");
 
+        userGrid.addColumn(new LocalDateRenderer<>(
+                User::getDateOfBirth,
+                () -> DateTimeFormatter.ofPattern("d.M. yyyy")))
+            .setHeader("Date of birth");
+
+        userDb.add(new User("Pavel", LocalDate.now(), "pavel@seznam.cz"));
+        userDb.add(new User("Jan", LocalDate.now(), "jan@seznam.cz"));
+
+        userGrid.setItems(userDb);
     }
 
     private void initButtonsRow() {
