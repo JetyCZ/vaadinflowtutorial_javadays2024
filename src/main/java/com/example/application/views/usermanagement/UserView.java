@@ -28,7 +28,7 @@ public class UserView extends VerticalLayout {
     DatePicker dateOfBirth = new DatePicker();
     EmailField email = new EmailField();
     HorizontalLayout buttonsRow = new HorizontalLayout();
-    Button registerNewAccountBtn = new Button();
+    Button saveNewUser = new Button();
     Button cancelBtn = new Button();
 
     public UserView() {
@@ -47,10 +47,10 @@ public class UserView extends VerticalLayout {
     private void initButtonsRow() {
         buttonsRow.addClassName(Gap.MEDIUM);
         buttonsRow.setWidth("100%");
-        registerNewAccountBtn.setText("Register new account");
-        registerNewAccountBtn.setWidth("min-content");
-        registerNewAccountBtn.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-        registerNewAccountBtn.addClickListener(new ComponentEventListener<ClickEvent<Button>>() {
+        saveNewUser.setText("Save new user");
+        saveNewUser.setWidth("min-content");
+        saveNewUser.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        saveNewUser.addClickListener(new ComponentEventListener<ClickEvent<Button>>() {
             @Override
             public void onComponentEvent(ClickEvent<Button> buttonClickEvent) {
                 Notification.show("User " + firstName.getValue() + " has been registered");
@@ -58,7 +58,7 @@ public class UserView extends VerticalLayout {
         });
         cancelBtn.setText("Cancel");
         cancelBtn.setWidth("min-content");
-        buttonsRow.add(registerNewAccountBtn);
+        buttonsRow.add(saveNewUser);
         buttonsRow.add(cancelBtn);
     }
 
