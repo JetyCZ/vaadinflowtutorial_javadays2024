@@ -1,11 +1,13 @@
 package com.example.application.views.usermanagement;
 
+import com.example.application.User;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -31,10 +33,15 @@ public class UserView extends VerticalLayout {
     Button registerNewAccountBtn = new Button();
     Button cancelBtn = new Button();
 
+    Grid<User> userGrid = new Grid<>(User.class);
+
     public UserView() {
         setWidth("100%");
         setMaxWidth("800px");
         setHeight("min-content");
+
+        initUserGrid();
+        add(userGrid);
 
         initUserForm();
         add(form);
@@ -42,6 +49,13 @@ public class UserView extends VerticalLayout {
         initButtonsRow();
         add(buttonsRow);
 
+    }
+
+    private void initUserGrid() {
+        userGrid.removeAllColumns();
+        userGrid.addColumn("firstName").setHeader("First name");
+        userGrid.addColumn("email").setHeader("E-mail");
+        userGrid.addColumn("dateOfBirth").setHeader("Birthday");
     }
 
     private void initButtonsRow() {
