@@ -45,9 +45,9 @@ public class UserForm extends FormLayout {
   private void saveUser() {
     userDb.add(userEntity);
     userGrid.setItems(userDb);
+    Notification.show("User " + userEntity.getFirstName() + " has been saved");
     userEntity = new User();
     binder.setBean(userEntity);
-    Notification.show("User " + userEntity.getFirstName() + " has been saved");
   }
 
   private void initFormFields() {
