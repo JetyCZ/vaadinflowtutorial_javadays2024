@@ -6,7 +6,9 @@ import com.example.application.views.usermanagement.UserForm.SaveUserEvent;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.renderer.LocalDateRenderer;
+import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.Menu;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
@@ -23,6 +25,8 @@ public class UserView extends VerticalLayout {
     Grid<User> userGrid = new Grid<>(User.class);
     H3 h3 = new H3();
     UserForm userForm = new UserForm();
+    TextField filterText = new TextField();
+
 
     public UserView(UserService userService) {
         this.userService = userService;
@@ -31,6 +35,12 @@ public class UserView extends VerticalLayout {
         setHeight("min-content");
 
         initUserGrid();
+        filterText.setWidth("400px");
+        filterText.setPlaceholder("Filter by First name or E-mail...");
+        filterText.setValueChangeMode(ValueChangeMode.LAZY);
+        filterText.addValueChangeListener(e -> filterUsersInGrid());
+
+        add(filterText);
         add(userGrid);
 
         h3.setText("Add new user");
@@ -38,6 +48,12 @@ public class UserView extends VerticalLayout {
         add(h3);
         add(userForm);
         userForm.addSaveListener(this::saveUser);
+    }
+
+    private void filterUsersInGrid() {
+        userGrid.setItems(
+            userService.searchUsers(filterText.getValue())
+        );
     }
 
     private void saveUser(SaveUserEvent saveUserEvent) {

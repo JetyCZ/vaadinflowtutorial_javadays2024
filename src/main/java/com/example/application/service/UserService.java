@@ -21,4 +21,8 @@ public class UserService {
   public void addUser(User user) {
     userRepository.save(user);
   }
+
+  public List<User> searchUsers(String text) {
+    return userRepository.search(text);
+  }
 }
