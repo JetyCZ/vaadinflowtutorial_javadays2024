@@ -1,9 +1,14 @@
 package com.example.application;
 
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 public class User {
+
+  @NotEmpty(message = "Please enter First Name")
   private String firstName;
+  @NotNull(message = "Please enter Birthday")
   private LocalDate dateOfBirth;
   private String email;
 

@@ -81,9 +81,5 @@ public class UserForm extends FormLayout {
     binder.setBean(new User());
     binder.bindInstanceFields(this);
     binder.addStatusChangeListener(e -> saveNewUser.setEnabled(binder.isValid()));
-    binder.forField(firstName)
-        .asRequired("Prosím zadejte jméno")
-        .bind(User::getFirstName, User::setFirstName)
-    ;
   }
 }
