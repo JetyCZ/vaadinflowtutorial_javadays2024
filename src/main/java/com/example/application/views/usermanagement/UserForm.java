@@ -52,8 +52,9 @@ public class UserForm extends FormLayout {
 
   private void saveUser() {
     if (binder.isValid()) {
+      String msg = "User " + binder.getBean().getFirstName() + " has been saved";
       fireEvent(new SaveUserEvent(this, binder.getBean()));
-      Notification.show("User " + binder.getBean().getFirstName() + " has been saved");
+      Notification.show(msg);
     }
   }
 
