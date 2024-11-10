@@ -1,6 +1,7 @@
 package com.example.application.views.usermanagement;
 
-import com.example.application.User;
+import com.example.application.data.User;
+import com.example.application.service.UserService;
 import com.example.application.views.usermanagement.UserForm.SaveUserEvent;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H3;
@@ -9,22 +10,22 @@ import com.vaadin.flow.data.renderer.LocalDateRenderer;
 import com.vaadin.flow.router.Menu;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @PageTitle("User management")
 @Route("")
 @Menu(order = 1, icon = "line-awesome/svg/user.svg")
 public class UserView extends VerticalLayout {
 
-    List<User> userDb = new ArrayList<>();
+    UserService userService;
+
     Grid<User> userGrid = new Grid<>(User.class);
     H3 h3 = new H3();
     UserForm userForm = new UserForm();
 
-    public UserView() {
+    public UserView(UserService userService) {
+        this.userService = userService;
         setWidth("100%");
         setMaxWidth("800px");
         setHeight("min-content");
@@ -40,9 +41,9 @@ public class UserView extends VerticalLayout {
     }
 
     private void saveUser(SaveUserEvent saveUserEvent) {
-        userDb.add(saveUserEvent.getUser());
+        userService.addUser(saveUserEvent.getUser());
         userForm.setUser(new User());
-        userGrid.setItems(userDb);
+        userGrid.setItems(userService.findAllUsers());
     }
 
     private void initUserGrid() {
@@ -55,10 +56,7 @@ public class UserView extends VerticalLayout {
                 () -> DateTimeFormatter.ofPattern("d.M. yyyy")))
             .setHeader("Date of birth");
 
-        userDb.add(new User("Pavel", LocalDate.now(), "pavel@seznam.cz"));
-        userDb.add(new User("Jan", LocalDate.now(), "jan@seznam.cz"));
-
-        userGrid.setItems(userDb);
+        userGrid.setItems(userService.findAllUsers());
     }
 
 
