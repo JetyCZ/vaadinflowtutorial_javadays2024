@@ -1,5 +1,6 @@
 package com.example.application.views.usermanagement;
 
+import com.example.application.User;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.button.Button;
@@ -10,9 +11,13 @@ import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.EmailField;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.theme.lumo.LumoUtility.Gap;
 
 public class UserForm extends FormLayout {
+
+  BeanValidationBinder<User> binder = new BeanValidationBinder<>(User.class);
+  User userEntity = new User();
 
   TextField firstName = new TextField();
   DatePicker dateOfBirth = new DatePicker();
@@ -30,7 +35,7 @@ public class UserForm extends FormLayout {
     saveNewUser.addClickListener(new ComponentEventListener<ClickEvent<Button>>() {
       @Override
       public void onComponentEvent(ClickEvent<Button> buttonClickEvent) {
-        Notification.show("User " + firstName.getValue() + " has been registered");
+        Notification.show("User " + userEntity.getFirstName() + " has been registered with " + userEntity.getEmail());
       }
     });
     cancelBtn.setText("Cancel");
@@ -53,5 +58,7 @@ public class UserForm extends FormLayout {
   public UserForm() {
     initFormFields();
     initButtonsRow();
+    binder.setBean(userEntity);
+    binder.bindInstanceFields(this);
   }
 }
