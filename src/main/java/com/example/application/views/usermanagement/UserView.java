@@ -3,8 +3,12 @@ package com.example.application.views.usermanagement;
 import com.example.application.data.User;
 import com.example.application.service.UserService;
 import com.example.application.views.usermanagement.UserForm.SaveUserEvent;
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H3;
+import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.renderer.LocalDateRenderer;
@@ -59,7 +63,7 @@ public class UserView extends VerticalLayout {
     private void saveUser(SaveUserEvent saveUserEvent) {
         userService.addUser(saveUserEvent.getUser());
         userForm.setUser(new User());
-        userGrid.setItems(userService.findAllUsers());
+        reloadUserGrid();
     }
 
     private void initUserGrid() {
@@ -72,9 +76,25 @@ public class UserView extends VerticalLayout {
                 () -> DateTimeFormatter.ofPattern("d.M. yyyy")))
             .setHeader("Date of birth");
 
-        userGrid.setItems(userService.findAllUsers());
+        userGrid.addComponentColumn(user -> {
+            Button deleteButton = new Button(new Icon(VaadinIcon.TRASH));
+            deleteButton.addClickListener(event -> {
+                deleteUser(user);
+            });
+            return deleteButton;
+        }).setHeader("Actions");
+        reloadUserGrid();
     }
 
+    private void deleteUser(User user) {
+        userService.delete(user);
+        reloadUserGrid();
+        Notification.show("User " + user.getFirstName() + " has been deleted...");
+    }
+
+    private void reloadUserGrid() {
+        userGrid.setItems(userService.findAllUsers());
+    }
 
 
 }

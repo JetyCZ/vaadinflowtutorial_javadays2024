@@ -25,4 +25,8 @@ public class UserService {
   public List<User> searchUsers(String text) {
     return userRepository.search(text);
   }
+
+  public void delete(User user) {
+    userRepository.delete(user);
+  }
 }
