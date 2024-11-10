@@ -3,12 +3,16 @@ package com.example.application.views.usermanagement;
 import com.example.application.data.User;
 import com.example.application.service.UserService;
 import com.example.application.views.usermanagement.UserForm.SaveUserEvent;
+import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
+import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.renderer.LocalDateRenderer;
@@ -79,10 +83,26 @@ public class UserView extends VerticalLayout {
         userGrid.addComponentColumn(user -> {
             Button deleteButton = new Button(new Icon(VaadinIcon.TRASH));
             deleteButton.addClickListener(event -> {
-                deleteUser(user);
+
+                ConfirmDialog confirmDialog = new ConfirmDialog(
+                    "User delete confirmation",
+                    "Are you sure you want to delete this user?",
+                    "Delete user",
+                    e -> {
+                        deleteUser(user);
+                    });
+                confirmDialog.setCancelable(true);
+                confirmDialog.open();
+
             });
             return deleteButton;
         }).setHeader("Actions");
+
+
+
+
+
+
         reloadUserGrid();
     }
 
