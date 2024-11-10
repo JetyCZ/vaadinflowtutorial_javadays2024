@@ -1,7 +1,6 @@
 package com.example.application.views.usermanagement;
 
-import com.example.application.User;
-import com.vaadin.flow.component.ClickEvent;
+import com.example.application.data.User;
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.button.Button;
@@ -52,8 +51,10 @@ public class UserForm extends FormLayout {
   }
 
   private void saveUser() {
-    fireEvent(new SaveUserEvent(this, binder.getBean()));
-    Notification.show("User " + binder.getBean().getFirstName() + " has been saved");
+    if (binder.isValid()) {
+      fireEvent(new SaveUserEvent(this, binder.getBean()));
+      Notification.show("User " + binder.getBean().getFirstName() + " has been saved");
+    }
   }
 
   public void addSaveListener(ComponentEventListener<SaveUserEvent> listener) {
@@ -79,5 +80,13 @@ public class UserForm extends FormLayout {
     initButtonsRow();
     binder.setBean(new User());
     binder.bindInstanceFields(this);
+    binder.addStatusChangeListener(e -> saveNewUser.setEnabled(binder.isValid()));
+    binder.forField(firstName)
+        .asRequired("Please enter First Name")
+        .bind(User::getFirstName, User::setFirstName);
+    binder.forField(dateOfBirth)
+        .asRequired("Please enter Birthday")
+        .bind(User::getDateOfBirth, User::setDateOfBirth)
+    ;
   }
 }

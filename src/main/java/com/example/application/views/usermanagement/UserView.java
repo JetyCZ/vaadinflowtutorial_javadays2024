@@ -1,6 +1,6 @@
 package com.example.application.views.usermanagement;
 
-import com.example.application.User;
+import com.example.application.data.User;
 import com.example.application.views.usermanagement.UserForm.SaveUserEvent;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H3;
