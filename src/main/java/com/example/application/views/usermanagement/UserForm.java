@@ -1,21 +1,23 @@
 package com.example.application.views.usermanagement;
 
-import com.example.application.User;
-import com.vaadin.flow.component.ClickEvent;
-import com.vaadin.flow.component.ComponentEventListener;
+import com.example.application.data.User;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.EmailField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.theme.lumo.LumoUtility.Gap;
+import java.util.List;
 
 public class UserForm extends FormLayout {
 
+  private final Grid<User> userGrid;
+  private final List<User> userDb;
   BeanValidationBinder<User> binder = new BeanValidationBinder<>(User.class);
   User userEntity = new User();
 
@@ -32,17 +34,20 @@ public class UserForm extends FormLayout {
     saveNewUser.setText("Save new user");
     saveNewUser.setWidth("min-content");
     saveNewUser.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-    saveNewUser.addClickListener(new ComponentEventListener<ClickEvent<Button>>() {
-      @Override
-      public void onComponentEvent(ClickEvent<Button> buttonClickEvent) {
-        Notification.show("User " + userEntity.getFirstName() + " has been registered with " + userEntity.getEmail());
-      }
-    });
+    saveNewUser.addClickListener(event -> saveUser());
     cancelBtn.setText("Cancel");
     cancelBtn.setWidth("min-content");
     buttonsRow.add(saveNewUser);
     buttonsRow.add(cancelBtn);
     add(buttonsRow);
+  }
+
+  private void saveUser() {
+    userDb.add(userEntity);
+    userGrid.setItems(userDb);
+    userEntity = new User();
+    binder.setBean(userEntity);
+    Notification.show("User " + userEntity.getFirstName() + " has been saved");
   }
 
   private void initFormFields() {
@@ -55,7 +60,9 @@ public class UserForm extends FormLayout {
     add(email);
   }
 
-  public UserForm() {
+  public UserForm(Grid<User> userGrid, List<User> userDb) {
+    this.userGrid = userGrid;
+    this.userDb = userDb;
     initFormFields();
     initButtonsRow();
     binder.setBean(userEntity);

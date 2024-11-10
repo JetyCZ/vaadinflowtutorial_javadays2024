@@ -1,11 +1,10 @@
 package com.example.application.views.usermanagement;
 
-import com.example.application.User;
+import com.example.application.data.User;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.renderer.LocalDateRenderer;
-import com.vaadin.flow.data.renderer.LocalDateTimeRenderer;
 import com.vaadin.flow.router.Menu;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
@@ -22,7 +21,7 @@ public class UserView extends VerticalLayout {
     List<User> userDb = new ArrayList<>();
     Grid<User> userGrid = new Grid<>(User.class);
     H3 h3 = new H3();
-    UserForm userForm = new UserForm();
+    UserForm userForm = new UserForm(userGrid, userDb);
 
     public UserView() {
         setWidth("100%");
