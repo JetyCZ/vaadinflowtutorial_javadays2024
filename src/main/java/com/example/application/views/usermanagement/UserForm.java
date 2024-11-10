@@ -1,7 +1,7 @@
 package com.example.application.views.usermanagement;
 
-import com.example.application.User;
-import com.vaadin.flow.component.ClickEvent;
+import com.example.application.data.User;
+import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
@@ -17,7 +17,6 @@ import com.vaadin.flow.theme.lumo.LumoUtility.Gap;
 public class UserForm extends FormLayout {
 
   BeanValidationBinder<User> binder = new BeanValidationBinder<>(User.class);
-  User userEntity = new User();
 
   TextField firstName = new TextField();
   DatePicker dateOfBirth = new DatePicker();
@@ -32,17 +31,36 @@ public class UserForm extends FormLayout {
     saveNewUser.setText("Save new user");
     saveNewUser.setWidth("min-content");
     saveNewUser.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-    saveNewUser.addClickListener(new ComponentEventListener<ClickEvent<Button>>() {
-      @Override
-      public void onComponentEvent(ClickEvent<Button> buttonClickEvent) {
-        Notification.show("User " + userEntity.getFirstName() + " has been registered with " + userEntity.getEmail());
-      }
-    });
+    saveNewUser.addClickListener(e -> saveUser());
     cancelBtn.setText("Cancel");
     cancelBtn.setWidth("min-content");
     buttonsRow.add(saveNewUser);
     buttonsRow.add(cancelBtn);
     add(buttonsRow);
+  }
+
+  public static class SaveUserEvent extends ComponentEvent<UserForm> {
+    private final User user;
+    public SaveUserEvent(UserForm source, User user) {
+      super(source, false);
+      this.user = user;
+    }
+    public User getUser() {
+      return user;
+    }
+  }
+
+  private void saveUser() {
+    fireEvent(new SaveUserEvent(this, binder.getBean()));
+    Notification.show("User " + binder.getBean().getFirstName() + " has been saved");
+  }
+
+  public void addSaveListener(ComponentEventListener<SaveUserEvent> listener) {
+    addListener(SaveUserEvent.class, listener);
+  }
+
+  public void setUser(User user) {
+    binder.setBean(user);
   }
 
   private void initFormFields() {
@@ -58,7 +76,7 @@ public class UserForm extends FormLayout {
   public UserForm() {
     initFormFields();
     initButtonsRow();
-    binder.setBean(userEntity);
+    binder.setBean(new User());
     binder.bindInstanceFields(this);
   }
 }

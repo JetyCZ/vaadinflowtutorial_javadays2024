@@ -1,11 +1,11 @@
 package com.example.application.views.usermanagement;
 
-import com.example.application.User;
+import com.example.application.data.User;
+import com.example.application.views.usermanagement.UserForm.SaveUserEvent;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.renderer.LocalDateRenderer;
-import com.vaadin.flow.data.renderer.LocalDateTimeRenderer;
 import com.vaadin.flow.router.Menu;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
@@ -36,6 +36,13 @@ public class UserView extends VerticalLayout {
         h3.setWidth("100%");
         add(h3);
         add(userForm);
+        userForm.addSaveListener(this::saveUser);
+    }
+
+    private void saveUser(SaveUserEvent saveUserEvent) {
+        userDb.add(saveUserEvent.getUser());
+        userForm.setUser(new User());
+        userGrid.setItems(userDb);
     }
 
     private void initUserGrid() {
