@@ -1,6 +1,6 @@
 package com.example.application.views.usermanagement;
 
-import com.example.application.User;
+import com.example.application.data.User;
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.button.Button;
